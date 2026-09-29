@@ -7,8 +7,8 @@
 - **Họ và tên:** Lê Châu Trân Phát
 - **MSSV:** 2A202602545
 - **Lớp:** K4-L3A
-- **Repository URL:** [ĐIỀN LINK GITHUB CỦA BẠN VÀO ĐÂY]
-- **Commit SHA cuối:** [ĐIỀN MÃ COMMIT SHA SAU KHI PUSH]
+- **Repository URL:** `https://github.com/tranphat1506/K4-L3A-Day13-LeChauTranPhat-2A202602545-Monitoring-LLMOps`
+- **Commit SHA cuối:** `f390668da9372aef60c14f495b40a1bb4f0ea997`
 - **Challenge ID:** `day13-k4-l3a-monitoring-llmops-v1`
 - **Tên project Langfuse cá nhân:** `day13-k4-l3a-2A202602545`
 
