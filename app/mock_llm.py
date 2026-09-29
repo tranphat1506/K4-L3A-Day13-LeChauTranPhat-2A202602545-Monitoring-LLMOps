@@ -21,10 +21,14 @@ class FakeResponse:
     ttft_ms: int
 
 
+from app.tracing import observe, get_langfuse_client
+from app.pii import scrub_text
+
 class FakeLLM:
     def __init__(self, model: str = "claude-sonnet-4-5") -> None:
         self.model = model
 
+    @observe(as_type="generation", name="llm_generate", capture_input=False, capture_output=False)
     def generate(self, prompt: str) -> FakeResponse:
         started = time.perf_counter()
         time.sleep(0.05)  # mô phỏng thời điểm token đầu tiên sẵn sàng
@@ -38,6 +42,24 @@ class FakeLLM:
             "Starter answer. You should improve this output logic and add better quality checks. "
             "Use retrieved context and keep responses concise."
         )
+        
+        input_cost = (input_tokens / 1_000_000) * 3
+        output_cost = (output_tokens / 1_000_000) * 15
+        cost_usd = round(input_cost + output_cost, 6)
+        
+        client = get_langfuse_client()
+        client.update_current_generation(
+            input=scrub_text(prompt),
+            output=scrub_text(answer),
+            model=self.model,
+            usage_details={
+                "input": input_tokens,
+                "output": output_tokens,
+                "total": input_tokens + output_tokens,
+            },
+            cost_details={"total": cost_usd},
+        )
+
         return FakeResponse(
             text=answer,
             usage=FakeUsage(input_tokens, output_tokens),
